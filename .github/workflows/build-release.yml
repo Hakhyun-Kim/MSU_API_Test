@@ -1,0 +1,112 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: MSU_API_Test-Windows
+            build_command: pyinstaller MSU_API_Test.spec
+          - os: macos-latest
+            artifact_name: MSU_API_Test-macOS
+            build_command: pyinstaller MSU_API_Test.spec
+          - os: ubuntu-latest
+            artifact_name: MSU_API_Test-Linux
+            build_command: pyinstaller MSU_API_Test.spec
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+        
+    - name: Build executable
+      run: ${{ matrix.build_command }}
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        body: |
+          ## MSU API Test Release
+          
+          ### What's New
+          - See [README](https://github.com/${{ github.repository }}/blob/main/README.md) for features
+          
+          ### Installation
+          1. Download the appropriate file for your operating system
+          2. **Windows**: Run `MSU_API_Test-Windows.exe`
+          3. **macOS**: Run `MSU_API_Test-macOS` (may need to allow in Security settings)
+          4. **Linux**: Make executable with `chmod +x MSU_API_Test-Linux` then run
+          
+    - name: Upload Windows Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/MSU_API_Test-Windows.exe/MSU_API_Test.exe
+        asset_name: MSU_API_Test-Windows.exe
+        asset_content_type: application/octet-stream
+        
+    - name: Upload macOS Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/MSU_API_Test-macOS/MSU_API_Test
+        asset_name: MSU_API_Test-macOS
+        asset_content_type: application/octet-stream
+        
+    - name: Upload Linux Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/MSU_API_Test-Linux/MSU_API_Test
+        asset_name: MSU_API_Test-Linux
+        asset_content_type: application/octet-stream 

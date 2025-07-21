@@ -151,4 +151,17 @@ Thumbs.db
 ehthumbs.db
 
 # Screenshots folder (if you want to exclude)
-# screenshots/ 
+# screenshots/
+
+# PyInstaller
+build/
+dist/
+*.spec
+!MSU_API_Test.spec
+
+# Installer files
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.AppImage 

@@ -34,6 +34,17 @@ A desktop application for testing and exploring the Maple Story Universe (MSU) A
 
 ## 📦 Installation
 
+### Option 1: Download Pre-built Release (Recommended)
+
+1. Go to the [Releases](https://github.com/yourusername/MSU_API_Test/releases) page
+2. Download the latest version for your operating system:
+   - **Windows**: `MSU_API_Test-Windows.exe` or `MSU_API_Test_Setup_1.0.0.exe` (installer)
+   - **macOS**: `MSU_API_Test-macOS`
+   - **Linux**: `MSU_API_Test-Linux`
+3. Run the downloaded file
+
+### Option 2: Build from Source
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/MSU_API_Test.git
@@ -54,6 +65,11 @@ source venv/bin/activate
 3. Install dependencies:
 ```bash
 pip install -r requirements.txt
+```
+
+4. (Optional) Build standalone executable:
+```bash
+python build.py
 ```
 
 ## 🚀 Running the Application
@@ -134,6 +150,20 @@ pyinstaller --windowed --onefile main.py
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+## 📦 Creating a Release
+
+Releases are automatically built when you create a new tag:
+
+```bash
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+This will trigger GitHub Actions to:
+- Build executables for Windows, macOS, and Linux
+- Create a GitHub release with the built files
+- Upload the executables as release assets
 
 ## 📝 Known Limitations
 
