@@ -17,7 +17,7 @@ A desktop application for testing and exploring the Maple Story Universe (MSU) A
 | macOS    | [![Download for macOS](https://img.shields.io/badge/Download-macOS-black?style=for-the-badge&logo=apple)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-macOS) | [![macOS Build](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg?label=macOS)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml) |
 | Linux    | [![Download for Linux](https://img.shields.io/badge/Download-Linux-orange?style=for-the-badge&logo=linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Linux) | [![Linux Build](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg?label=Linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml) |
 
-**Latest Release**: v0.2.0 - [View Release Page](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest)
+**Latest Release**: v1.0.2 - [View Release Page](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest)
 
 </div>
 

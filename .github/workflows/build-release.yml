@@ -80,7 +80,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch'
     
     steps:
     - uses: actions/checkout@v4
@@ -90,54 +90,84 @@ jobs:
       with:
         path: ./artifacts
         
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Get latest release
+      id: get_release
+      uses: actions/github-script@v7
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-        body: |
-          ## MSU API Test Release
+        script: |
+          // Try to get the latest release
+          try {
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            });
+            
+            if (releases.data.length > 0) {
+              const release = releases.data[0];
+              core.setOutput('upload_url', release.upload_url);
+              core.setOutput('release_id', release.id);
+              console.log(`Found release: ${release.tag_name}`);
+              return;
+            }
+          } catch (error) {
+            console.log('No releases found, will create one if on tag');
+          }
           
-          ### What's New
-          - See [README](https://github.com/${{ github.repository }}/blob/main/README.md) for features
+          core.setOutput('upload_url', '');
+          core.setOutput('release_id', '');
           
-          ### Installation
-          1. Download the appropriate file for your operating system
-          2. **Windows**: Run `MSU_API_Test-Windows.exe`
-          3. **macOS**: Run `MSU_API_Test-macOS` (may need to allow in Security settings)
-          4. **Linux**: Make executable with `chmod +x MSU_API_Test-Linux` then run
+    - name: Upload Release Assets
+      if: steps.get_release.outputs.upload_url != ''
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
           
-    - name: Upload Windows Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/MSU_API_Test-Windows.exe/MSU_API_Test.exe
-        asset_name: MSU_API_Test-Windows.exe
-        asset_content_type: application/octet-stream
-        
-    - name: Upload macOS Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/MSU_API_Test-macOS/MSU_API_Test
-        asset_name: MSU_API_Test-macOS
-        asset_content_type: application/octet-stream
-        
-    - name: Upload Linux Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/MSU_API_Test-Linux/MSU_API_Test
-        asset_name: MSU_API_Test-Linux
-        asset_content_type: application/octet-stream 
+          // Get the release upload URL
+          const uploadUrl = '${{ steps.get_release.outputs.upload_url }}';
+          
+          // Define assets to upload
+          const assets = [
+            {
+              path: './artifacts/MSU_API_Test-Windows.exe/MSU_API_Test.exe',
+              name: 'MSU_API_Test-Windows.exe',
+              contentType: 'application/octet-stream'
+            },
+            {
+              path: './artifacts/MSU_API_Test-macOS/MSU_API_Test',
+              name: 'MSU_API_Test-macOS',
+              contentType: 'application/octet-stream'
+            },
+            {
+              path: './artifacts/MSU_API_Test-Linux/MSU_API_Test',
+              name: 'MSU_API_Test-Linux',
+              contentType: 'application/octet-stream'
+            }
+          ];
+          
+          // Upload each asset
+          for (const asset of assets) {
+            if (fs.existsSync(asset.path)) {
+              console.log(`Uploading ${asset.name}...`);
+              const data = fs.readFileSync(asset.path);
+              
+              try {
+                await github.rest.repos.uploadReleaseAsset({
+                  url: uploadUrl,
+                  name: asset.name,
+                  data: data,
+                  headers: {
+                    'content-type': asset.contentType,
+                    'content-length': data.length
+                  }
+                });
+                console.log(`✓ Uploaded ${asset.name}`);
+              } catch (error) {
+                console.error(`Failed to upload ${asset.name}:`, error.message);
+              }
+            } else {
+              console.log(`⚠ File not found: ${asset.path}`);
+            }
+          } 
