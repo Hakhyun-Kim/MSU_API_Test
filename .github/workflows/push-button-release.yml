@@ -18,12 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
+      actions: write
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: Validate version
       run: |
@@ -33,21 +36,11 @@ jobs:
           exit 1
         fi
     
-    - name: Create and push tag
-      run: |
-        VERSION="v${{ github.event.inputs.version }}"
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git tag -a $VERSION -m "Release $VERSION: ${{ github.event.inputs.release_notes }}"
-        git push origin $VERSION
-    
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Release with Tag
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ github.event.inputs.version }}
-        release_name: Release v${{ github.event.inputs.version }}
+        name: Release v${{ github.event.inputs.version }}
         body: |
           ## Release v${{ github.event.inputs.version }}
           
@@ -61,4 +54,5 @@ jobs:
           - 🍎 **macOS**: MSU_API_Test-macOS
           - 🐧 **Linux**: MSU_API_Test-Linux
         draft: false
-        prerelease: false 
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }} 

@@ -226,6 +226,14 @@ All methods will trigger GitHub Actions to:
 - Create a GitHub release with the built files
 - Upload the executables as release assets
 
+### ⚠️ Important: GitHub Repository Settings
+
+For automatic releases to work, ensure your repository has the correct permissions:
+1. Go to Settings → Actions → General
+2. Under "Workflow permissions", select "Read and write permissions"
+3. Check "Allow GitHub Actions to create and approve pull requests"
+4. Click "Save"
+
 ## 📝 Known Limitations
 
 - Currently uses mock data instead of live API
