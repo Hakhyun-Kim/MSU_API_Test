@@ -48,5 +48,6 @@ jobs:
     - name: Test imports (minimal platform)
       env:
         QT_QPA_PLATFORM: minimal
+        PYTHONIOENCODING: utf-8
       run: |
         python test_imports.py 
