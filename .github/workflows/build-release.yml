@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+  repository_dispatch:
+    types: [build-release]
 
 jobs:
   build:

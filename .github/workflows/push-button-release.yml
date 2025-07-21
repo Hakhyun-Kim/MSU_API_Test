@@ -55,4 +55,11 @@ jobs:
           - 🐧 **Linux**: MSU_API_Test-Linux
         draft: false
         prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }} 
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Trigger build workflow
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        event-type: build-release
+        client-payload: '{"tag": "v${{ github.event.inputs.version }}"}' 

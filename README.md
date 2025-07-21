@@ -11,11 +11,13 @@ A desktop application for testing and exploring the Maple Story Universe (MSU) A
 
 <div align="center">
 
-| Platform | Download |
-|----------|----------|
-| Windows  | [![Download for Windows](https://img.shields.io/badge/Download-Windows%20.exe-blue?style=for-the-badge&logo=windows)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Windows.exe) |
-| macOS    | [![Download for macOS](https://img.shields.io/badge/Download-macOS-black?style=for-the-badge&logo=apple)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-macOS) |
-| Linux    | [![Download for Linux](https://img.shields.io/badge/Download-Linux-orange?style=for-the-badge&logo=linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Linux) |
+| Platform | Download | Status |
+|----------|----------|--------|
+| Windows  | [![Download for Windows](https://img.shields.io/badge/Download-Windows%20.exe-blue?style=for-the-badge&logo=windows)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Windows.exe) | [![Windows Build](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg?label=Windows)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml) |
+| macOS    | [![Download for macOS](https://img.shields.io/badge/Download-macOS-black?style=for-the-badge&logo=apple)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-macOS) | [![macOS Build](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg?label=macOS)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml) |
+| Linux    | [![Download for Linux](https://img.shields.io/badge/Download-Linux-orange?style=for-the-badge&logo=linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Linux) | [![Linux Build](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg?label=Linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml) |
+
+**Latest Release**: v0.2.0 - [View Release Page](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest)
 
 </div>
 
@@ -207,6 +209,16 @@ The workflow will automatically:
 - Upload them as downloadable assets
 
 See [Quick Release Guide](QUICK_RELEASE.md) for detailed instructions.
+
+### ⚡ Release Created but No Downloads?
+
+If you created a release but don't see download files:
+1. Go to [Build and Release workflow](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml)
+2. Click "Run workflow" → Select your release tag → Run
+3. Wait 10-15 minutes for builds to complete
+4. Downloads will appear on your [release page](https://github.com/Hakhyun-Kim/MSU_API_Test/releases)
+
+Or run locally: `py build_for_release.py`
 
 ### Manual Release
 
