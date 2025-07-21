@@ -39,8 +39,8 @@ On Linux systems, you may need to install additional system packages:
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
-  libgl1-mesa-glx \
-  libegl1-mesa \
+  libgl1 \
+  libegl1 \
   libxkbcommon-x11-0 \
   libxcb-icccm4 \
   libxcb-image0 \
@@ -48,7 +48,9 @@ sudo apt-get install -y \
   libxcb-randr0 \
   libxcb-render-util0 \
   libxcb-xinerama0 \
-  libxcb-xfixes0
+  libxcb-xfixes0 \
+  libfontconfig1 \
+  libdbus-1-3
 ```
 
 ## 📦 Installation
