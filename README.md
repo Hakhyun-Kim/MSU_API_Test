@@ -28,9 +28,28 @@ A desktop application for testing and exploring the Maple Story Universe (MSU) A
 
 ## 🔧 Requirements
 
-- Python 3.8 or higher
+- Python 3.10 or higher
 - PyQt6
 - See `requirements.txt` for full dependencies
+
+### System Requirements (Linux)
+
+On Linux systems, you may need to install additional system packages:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  libgl1-mesa-glx \
+  libegl1-mesa \
+  libxkbcommon-x11-0 \
+  libxcb-icccm4 \
+  libxcb-image0 \
+  libxcb-keysyms1 \
+  libxcb-randr0 \
+  libxcb-render-util0 \
+  libxcb-xinerama0 \
+  libxcb-xfixes0
+```
 
 ## 📦 Installation
 
