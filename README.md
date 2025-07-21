@@ -191,24 +191,22 @@ pyinstaller --windowed --onefile main.py
 
 ## 📦 Creating a Release
 
-### Automatic Releases (Recommended)
+### 🚀 Easy Push-Button Release (Recommended)
 
-This project supports multiple ways to create releases automatically:
+The simplest way to create a release - no command line needed!
 
-#### 1. Commit-based Auto Release
-Every push to `main` branch will automatically create a release if there are new commits. Version is determined by commit messages:
-- `fix:` or `perf:` → Patch release (1.0.0 → 1.0.1)
-- `feat:` or `feature:` → Minor release (1.0.0 → 1.1.0)
-- `BREAKING CHANGE:` → Major release (1.0.0 → 2.0.0)
+1. **One-time setup**: Enable GitHub Actions permissions ([instructions](SETUP_RELEASES.md))
+2. Go to [Push Button Release](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/push-button-release.yml)
+3. Click **"Run workflow"**
+4. Enter version (e.g., `1.0.0`) and release notes
+5. Click **"Run workflow"** - Done! 🎉
 
-#### 2. Manual Trigger from GitHub Actions
-1. Go to [Actions](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/auto-release.yml)
-2. Click "Run workflow"
-3. Select release type (patch/minor/major)
-4. Click "Run workflow"
+The workflow will automatically:
+- Create a GitHub release
+- Build executables for Windows, macOS, and Linux
+- Upload them as downloadable assets
 
-#### 3. Scheduled Releases
-Automatic weekly releases every Sunday (if there are new commits)
+See [Quick Release Guide](QUICK_RELEASE.md) for detailed instructions.
 
 ### Manual Release
 

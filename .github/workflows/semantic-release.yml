@@ -1,8 +1,8 @@
 name: Semantic Release
 
 on:
-  push:
-    branches: [ main ]
+  # Disabled for now - use Push Button Release instead
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -28,7 +28,14 @@ jobs:
     
     - name: Install semantic-release
       run: |
-        npm install -g semantic-release @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/exec
+        npm install -g semantic-release \
+          @semantic-release/git \
+          @semantic-release/github \
+          @semantic-release/changelog \
+          @semantic-release/exec \
+          @semantic-release/commit-analyzer \
+          @semantic-release/release-notes-generator \
+          conventional-changelog-conventionalcommits
     
     - name: Create .releaserc.json
       run: |
