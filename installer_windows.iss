@@ -3,7 +3,7 @@
 #define MyAppName "MSU API Test"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "MSU API Test Contributors"
-#define MyAppURL "https://github.com/yourusername/MSU_API_Test"
+#define MyAppURL "https://github.com/Hakhyun-Kim/MSU_API_Test"
 #define MyAppExeName "MSU_API_Test.exe"
 
 [Setup]

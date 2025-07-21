@@ -1,0 +1,64 @@
+name: Push Button Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.1)'
+        required: true
+        type: string
+      release_notes:
+        description: 'Release notes'
+        required: false
+        type: string
+        default: 'Bug fixes and improvements'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Validate version
+      run: |
+        VERSION="${{ github.event.inputs.version }}"
+        if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Error: Version must be in format X.Y.Z (e.g., 1.0.1)"
+          exit 1
+        fi
+    
+    - name: Create and push tag
+      run: |
+        VERSION="v${{ github.event.inputs.version }}"
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag -a $VERSION -m "Release $VERSION: ${{ github.event.inputs.release_notes }}"
+        git push origin $VERSION
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        release_name: Release v${{ github.event.inputs.version }}
+        body: |
+          ## Release v${{ github.event.inputs.version }}
+          
+          ${{ github.event.inputs.release_notes }}
+          
+          ### Downloads
+          
+          Please wait a few minutes for the builds to complete. The download links will appear below once ready.
+          
+          - 🪟 **Windows**: MSU_API_Test-Windows.exe
+          - 🍎 **macOS**: MSU_API_Test-macOS
+          - 🐧 **Linux**: MSU_API_Test-Linux
+        draft: false
+        prerelease: false 

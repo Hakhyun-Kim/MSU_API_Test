@@ -1,6 +1,23 @@
 # Maple Story Universe API Test Application
 
+[![Python application](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/python-app.yml/badge.svg)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/python-app.yml)
+[![Build and Release](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml/badge.svg)](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/build-release.yml)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Hakhyun-Kim/MSU_API_Test)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A desktop application for testing and exploring the Maple Story Universe (MSU) API, built with Python and PyQt6.
+
+## 📥 Download Latest Release
+
+<div align="center">
+
+| Platform | Download |
+|----------|----------|
+| Windows  | [![Download for Windows](https://img.shields.io/badge/Download-Windows%20.exe-blue?style=for-the-badge&logo=windows)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Windows.exe) |
+| macOS    | [![Download for macOS](https://img.shields.io/badge/Download-macOS-black?style=for-the-badge&logo=apple)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-macOS) |
+| Linux    | [![Download for Linux](https://img.shields.io/badge/Download-Linux-orange?style=for-the-badge&logo=linux)](https://github.com/Hakhyun-Kim/MSU_API_Test/releases/latest/download/MSU_API_Test-Linux) |
+
+</div>
 
 ## 📸 Screenshots
 
@@ -57,18 +74,18 @@ sudo apt-get install -y \
 
 ### Option 1: Download Pre-built Release (Recommended)
 
-1. Go to the [Releases](https://github.com/yourusername/MSU_API_Test/releases) page
-2. Download the latest version for your operating system:
-   - **Windows**: `MSU_API_Test-Windows.exe` or `MSU_API_Test_Setup_1.0.0.exe` (installer)
-   - **macOS**: `MSU_API_Test-macOS`
-   - **Linux**: `MSU_API_Test-Linux`
-3. Run the downloaded file
+1. Click the download button for your platform in the [Download Latest Release](#-download-latest-release) section above
+2. Or visit the [Releases](https://github.com/Hakhyun-Kim/MSU_API_Test/releases) page for all versions
+3. Run the downloaded file:
+   - **Windows**: Double-click `MSU_API_Test-Windows.exe`
+   - **macOS**: Open terminal and run `chmod +x MSU_API_Test-macOS && ./MSU_API_Test-macOS`
+   - **Linux**: Open terminal and run `chmod +x MSU_API_Test-Linux && ./MSU_API_Test-Linux`
 
 ### Option 2: Build from Source
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/MSU_API_Test.git
+git clone https://github.com/Hakhyun-Kim/MSU_API_Test.git
 cd MSU_API_Test
 ```
 
@@ -174,14 +191,37 @@ pyinstaller --windowed --onefile main.py
 
 ## 📦 Creating a Release
 
-Releases are automatically built when you create a new tag:
+### Automatic Releases (Recommended)
+
+This project supports multiple ways to create releases automatically:
+
+#### 1. Commit-based Auto Release
+Every push to `main` branch will automatically create a release if there are new commits. Version is determined by commit messages:
+- `fix:` or `perf:` → Patch release (1.0.0 → 1.0.1)
+- `feat:` or `feature:` → Minor release (1.0.0 → 1.1.0)
+- `BREAKING CHANGE:` → Major release (1.0.0 → 2.0.0)
+
+#### 2. Manual Trigger from GitHub Actions
+1. Go to [Actions](https://github.com/Hakhyun-Kim/MSU_API_Test/actions/workflows/auto-release.yml)
+2. Click "Run workflow"
+3. Select release type (patch/minor/major)
+4. Click "Run workflow"
+
+#### 3. Scheduled Releases
+Automatic weekly releases every Sunday (if there are new commits)
+
+### Manual Release
 
 ```bash
+# Using the helper script
+py create_release.py
+
+# Or manually with git
 git tag -a v1.0.0 -m "Release version 1.0.0"
 git push origin v1.0.0
 ```
 
-This will trigger GitHub Actions to:
+All methods will trigger GitHub Actions to:
 - Build executables for Windows, macOS, and Linux
 - Create a GitHub release with the built files
 - Upload the executables as release assets

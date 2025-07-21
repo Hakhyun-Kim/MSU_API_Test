@@ -33,5 +33,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mock API implementation
 - Basic UI with PyQt6
 
-[Unreleased]: https://github.com/yourusername/MSU_API_Test/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/yourusername/MSU_API_Test/releases/tag/v1.0.0 
+[Unreleased]: https://github.com/Hakhyun-Kim/MSU_API_Test/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Hakhyun-Kim/MSU_API_Test/releases/tag/v1.0.0 

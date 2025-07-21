@@ -1,0 +1,92 @@
+name: Semantic Release
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts/*'
+    
+    - name: Install semantic-release
+      run: |
+        npm install -g semantic-release @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/exec
+    
+    - name: Create .releaserc.json
+      run: |
+        cat > .releaserc.json << 'EOF'
+        {
+          "branches": ["main"],
+          "plugins": [
+            ["@semantic-release/commit-analyzer", {
+              "preset": "conventionalcommits",
+              "releaseRules": [
+                {"type": "feat", "release": "minor"},
+                {"type": "fix", "release": "patch"},
+                {"type": "perf", "release": "patch"},
+                {"type": "docs", "scope": "README", "release": "patch"},
+                {"type": "breaking", "release": "major"},
+                {"type": "BREAKING CHANGE", "release": "major"}
+              ]
+            }],
+            "@semantic-release/release-notes-generator",
+            ["@semantic-release/changelog", {
+              "changelogFile": "CHANGELOG.md"
+            }],
+            ["@semantic-release/exec", {
+              "prepareCmd": "echo ${nextRelease.version} > version.txt"
+            }],
+            ["@semantic-release/git", {
+              "assets": ["CHANGELOG.md"],
+              "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }],
+            ["@semantic-release/github", {
+              "successComment": false
+            }]
+          ]
+        }
+        EOF
+    
+    - name: Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npx semantic-release
+    
+    - name: Get version
+      id: version
+      run: |
+        if [ -f version.txt ]; then
+          VERSION=$(cat version.txt)
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Released version: v$VERSION"
+        fi
+    
+    - name: Trigger build
+      if: steps.version.outputs.version
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'build-release.yml',
+            ref: 'main'
+          }) 
